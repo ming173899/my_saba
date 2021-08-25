@@ -7,6 +7,7 @@
 
 namespace saba
 {
+
 	Light::Light()
 		: m_lightColor(0.6f)
 		, m_lightDir(-0.5f, -1.0f, -0.5f)

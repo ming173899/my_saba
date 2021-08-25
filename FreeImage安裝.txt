@@ -1,0 +1,24 @@
+1.下載:
+https://freeimage.sourceforge.io/download.html
+
+Download FreeImage 3.18.0 不要載 Download FreeImage 3.18.0 [WIN32/WIN64]
+
+2.開啟2017sln
+改成Debug 和 x64
+右鍵FreeImage->重建
+
+3.到Dist資料夾裡的x64將FreeImage.h丟到C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\include
+			FreeImaged.lib丟到C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\lib\x64
+			FreeImaged.dll丟到saba/build的資料夾
+
+4.#include <FreeImage.h>要加
+
+#ifdef _DEBUG
+ 
+#pragma comment(lib, "FreeImaged.lib")
+ 
+#else
+ 
+#pragma comment(lib, "FreeImage.lib")
+ 
+#endif

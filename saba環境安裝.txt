@@ -1,0 +1,65 @@
+1.安裝bullet
+
+先下載bullet3:https://github.com/bulletphysics/bullet3
+
+將bullet3的zip檔解壓縮以後，進入bullet3的資料夾創建一個build的資料夾
+
+進入build的資料夾，按照以下程式碼輸入
+
+cmake -G "Visual Studio 16 2019" ^ (這裡需要依照你的版本更改)
+    -D CMAKE_INSTALL_PREFIX="Your Bullet Physics install directory (就是在bullet3創建的build資料夾)" ^
+    -D INSTALL_LIBS=ON ^
+    -D USE_MSVC_RUNTIME_LIBRARY_DLL=On ^
+    -D BUILD_CPU_DEMOS=Off ^
+    -D BUILD_OPENGL3_DEMOS=Off ^
+    -D BUILD_BULLET2_DEMOS=Off ^
+    -D BUILD_UNIT_TESTS=Off ^
+    ..
+
+之後會建置一個visual的專案，然後繼續照以下程式碼輸入
+
+cmake --build . --config Debug --target ALL_BUILD
+cmake --build . --config Debug --target INSTALL
+cmake --build . --config Release --target ALL_BUILD
+cmake --build . --config Release --target INSTALL
+
+2.下載GLFW
+
+https://www.glfw.org/download.html    (Source package)
+
+將GLFW的zip檔解壓縮以後，進入GLFW的資料夾創建一個build的資料夾
+
+進入build的資料夾，按照以下程式碼輸入
+
+cmake -G "Visual Studio 16 2019" ^ (這裡需要依照你的版本更改)
+    -D CMAKE_INSTALL_PREFIX="Your GLFW install directory (就是在GLFW創建的build資料夾)" ^
+    -D INSTALL_LIBS=ON ^
+    -D USE_MSVC_RUNTIME_LIBRARY_DLL=On ^
+    -D BUILD_CPU_DEMOS=Off ^
+    -D BUILD_OPENGL3_DEMOS=Off ^
+    -D BUILD_BULLET2_DEMOS=Off ^
+    -D BUILD_UNIT_TESTS=Off ^
+    ..
+
+之後會建置一個visual的專案，然後繼續照以下程式碼輸入
+
+cmake --build . --config Debug --target ALL_BUILD
+cmake --build . --config Debug --target INSTALL
+cmake --build . --config Release --target ALL_BUILD
+cmake --build . --config Release --target INSTALL
+
+3.下載saba並安裝
+
+下載saba:https://github.com/benikabocha/saba
+
+將saba的zip檔解壓縮，進入saba資料夾創建一個build的資料夾
+
+進入build資料夾，按照以下程式碼輸入
+
+cmake -G "Visual Studio 16 2019" ^
+    -D SABA_BULLET_ROOT="Your Bullet Physics install directory (在bullet3資料夾下創建的build資料夾)" ^
+    -D SABA_GLFW_ROOT="your GLFW install directory (GLFW資料夾下的build資料夾)" ^
+    ..
+
+
+

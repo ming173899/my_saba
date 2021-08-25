@@ -2217,7 +2217,7 @@ namespace saba
 				}
 				else {
 					MMDNames.clear();
-					//MMDNumbers = 2;
+					MMDNumbers = 0;
 					std::string s;
 					while (std::getline(ifs, s)) {
 						MMDNames.push_back(s);
@@ -3225,159 +3225,46 @@ namespace saba
 		}
 		if (key == GLFW_KEY_N && action == GLFW_PRESS) {
 			std::cout << "M:Base Image" << std::endl;
-			std::string saveString = "D:\\mypaper\\StyleGan2Dataset";
-			MMDNumbers = 0;
+			std::string saveString = "D:\\mypaper\\dataSet\\confirm";
+			int overNumber;
+			std::cin >> MMDNumbers;
+			std::cin >> overNumber;
+
 			ChangeMMD();
 			ChangeCamera();
 			int w, h;
 			glfwGetFramebufferSize(m_window, &w, &h);
 
-			for (int i = 0; i < MMDCameras.size(); i++) {
+			for (; MMDNumbers < overNumber; ++MMDNumbers) {
+
 				ChangeMMD();
 				ChangeCamera();
+
+				auto mmdModelDrawer = reinterpret_cast<GLMMDModelDrawer*>(m_modelDrawers[0].get());
+				auto mmdModel = mmdModelDrawer->GetModel();
+				auto model = mmdModel->GetMMDModel();
+				auto morphMan = model->GetMorphManager();
+				size_t morphCount = morphMan->GetMorphCount();
+
+				int targetIndex = 0;
+				
+				for (int j = 0; j < morphCount; j++) {
+					if (morphMan->GetMorph(j)->GetName() == "left") {
+						targetIndex = j;
+					}
+				}
+
+				morphMan->GetMorph(targetIndex)->SetWeight(1);
+
+				mmdModel->UpdateMorph();
+
 				Update();
 				Draw();
 				glfwSwapBuffers(m_window);	//buffer
 				glfwPollEvents(); //check events
-				std::string picturePath = saveString + "\\" + std::to_string(i);
+				std::string picturePath = saveString + "\\" + std::to_string(MMDNumbers);
 				screenShot(0, 0, w, h, picturePath);
-				MMDNumbers++;
 			}
-		}
-		if (key == GLFW_KEY_M && action == GLFW_PRESS) {
-			std::cout << "M:Mypaper Image" << std::endl;
-
-			std::string imgBaseString = "D:\\mypaper\\img";
-
-			MMDNumbers = 3497;
-
-			ChangeMMD();
-			ChangeCamera();
-
-			int w, h;
-			glfwGetFramebufferSize(m_window, &w, &h);
-
-			auto mmdModelDrawer = reinterpret_cast<GLMMDModelDrawer*>(m_modelDrawers[0].get());
-			auto mmdModel = mmdModelDrawer->GetModel();
-			auto model = mmdModel->GetMMDModel();
-			auto morphMan = model->GetMorphManager();
-			size_t morphCount = morphMan->GetMorphCount();
-
-			int leftIndex = 0;
-			int rightIndex = 0;
-			int mouseIndex = 0;
-
-			for (int j = 0; j < morphCount; j++) {
-
-				if (morphMan->GetMorph(j)->GetName() == "left") {
-					leftIndex = j;
-				}
-
-				if (morphMan->GetMorph(j)->GetName() == "right") {
-					rightIndex = j;
-				}
-
-				if (morphMan->GetMorph(j)->GetName().size() > 3) {
-					continue;
-				}
-
-				int unicode;
-				utf82u(const_cast<char*>(morphMan->GetMorph(j)->GetName().c_str()), &unicode);
-
-				if (unicode == 0x3042) {
-					std::cout << unicode << std::endl;
-					mouseIndex = j;
-				}
-
-			}
-
-			morphMan->GetMorph(leftIndex)->SetWeight(1);
-			morphMan->GetMorph(rightIndex)->SetWeight(0);
-			morphMan->GetMorph(mouseIndex)->SetWeight(0);
-			mmdModel->UpdateMorph();
-			Update();
-			Draw();
-			glfwSwapBuffers(m_window);	//buffer
-			glfwPollEvents(); //check events
-			std::string picturePath = imgBaseString + "\\data1";
-			screenShot(0, 0, w, h, picturePath);
-
-			morphMan->GetMorph(leftIndex)->SetWeight(0);
-			morphMan->GetMorph(rightIndex)->SetWeight(1);
-			morphMan->GetMorph(mouseIndex)->SetWeight(0);
-			mmdModel->UpdateMorph();
-			Update();
-			Draw();
-			glfwSwapBuffers(m_window);	//buffer
-			glfwPollEvents(); //check events
-			picturePath = imgBaseString + "\\data2";
-			screenShot(0, 0, w, h, picturePath);
-
-			morphMan->GetMorph(leftIndex)->SetWeight(0);
-			morphMan->GetMorph(rightIndex)->SetWeight(0);
-			morphMan->GetMorph(mouseIndex)->SetWeight(1);
-			mmdModel->UpdateMorph();
-			Update();
-			Draw();
-			glfwSwapBuffers(m_window);	//buffer
-			glfwPollEvents(); //check events
-			picturePath = imgBaseString + "\\data3";
-			screenShot(0, 0, w, h, picturePath);
-
-			LoadVPDFile("D:\\mypaper\\dataSet\\vpd\\-15_0_0.vpd");
-			mmdModel->UpdateMorph();
-			Update();
-			Draw();
-			glfwSwapBuffers(m_window);	//buffer
-			glfwPollEvents(); //check events
-			picturePath = imgBaseString + "\\data4";
-			screenShot(0, 0, w, h, picturePath);
-
-			LoadVPDFile("D:\\mypaper\\dataSet\\vpd\\15_0_0.vpd");
-			mmdModel->UpdateMorph();
-			Update();
-			Draw();
-			glfwSwapBuffers(m_window);	//buffer
-			glfwPollEvents(); //check events
-			picturePath = imgBaseString + "\\data5";
-			screenShot(0, 0, w, h, picturePath);
-
-			LoadVPDFile("D:\\mypaper\\dataSet\\vpd\\0_-15_0.vpd");
-			mmdModel->UpdateMorph();
-			Update();
-			Draw();
-			glfwSwapBuffers(m_window);	//buffer
-			glfwPollEvents(); //check events
-			picturePath = imgBaseString + "\\data6";
-			screenShot(0, 0, w, h, picturePath);
-
-			LoadVPDFile("D:\\mypaper\\dataSet\\vpd\\0_15_0.vpd");
-			mmdModel->UpdateMorph();
-			Update();
-			Draw();
-			glfwSwapBuffers(m_window);	//buffer
-			glfwPollEvents(); //check events
-			picturePath = imgBaseString + "\\data7";
-			screenShot(0, 0, w, h, picturePath);
-
-			LoadVPDFile("D:\\mypaper\\dataSet\\vpd\\0_0_-15.vpd");
-			mmdModel->UpdateMorph();
-			Update();
-			Draw();
-			glfwSwapBuffers(m_window);	//buffer
-			glfwPollEvents(); //check events
-			picturePath = imgBaseString + "\\data8";
-			screenShot(0, 0, w, h, picturePath);
-
-			LoadVPDFile("D:\\mypaper\\dataSet\\vpd\\0_0_15.vpd");
-			mmdModel->UpdateMorph();
-			Update();
-			Draw();
-			glfwSwapBuffers(m_window);	//buffer
-			glfwPollEvents(); //check events
-			picturePath = imgBaseString + "\\data9";
-			screenShot(0, 0, w, h, picturePath);
-
 		}
 		if (key == GLFW_KEY_P && action == GLFW_PRESS) {			//Take Picture
 			std::cout << "P:Take Picture" << std::endl;
@@ -3399,27 +3286,30 @@ namespace saba
 
 			}
 
-			MMDNumbers = 3497;
+			MMDNumbers = 7129;
 
 			int w, h;
 			glfwGetFramebufferSize(m_window, &w, &h);
 
-			for (; MMDNumbers < MMDCameras.size(); MMDNumbers++) {
+			for (; MMDNumbers < MMDCameras.size(); ++MMDNumbers) {
+
+				std::default_random_engine generator(time(NULL));
+				std::uniform_real_distribution<float> aa(0.5, 1.0);
 
 				ChangeMMD();
 				ChangeCamera();
 
-				std::string picturePath = imgBaseString + "\\" + std::to_string(MMDNumbers) + "\\MMD" + std::to_string(MMDNumbers) + "_0";
-				std::string labelPath = labelBaseString + "\\" + std::to_string(MMDNumbers) + "\\MMD" + std::to_string(MMDNumbers) + "_0.txt";
+				glm::vec3 lightDir = m_context.GetLight()->GetLightDirection();
+
+				glm::vec3 sun(aa(generator));
+
+				Light light;
+				light.SetLightDirection(lightDir);
+				light.SetLightColor(sun);
+				m_context.SetLight(light);
 
 				Update();
 				Draw();
-				glfwSwapBuffers(m_window);	//buffer
-				glfwPollEvents(); //check events
-
-				screenShot(0, 0, w, h, picturePath);
-
-				SaveDataSet(0.0, 0.0, 0.0, 0.0, 0.0, 0.0, labelPath);
 
 				std::vector<double> lefteye, righteye, mouse, x, y, z;
 
@@ -3479,13 +3369,47 @@ namespace saba
 
 				}
 
-				for (int i = 1; i < 71; i++) {
+				std::string picturePath = imgBaseString + "\\" + std::to_string(MMDNumbers) + "\\MMD" + std::to_string(MMDNumbers) + "_0";
+				std::string labelPath = labelBaseString + "\\" + std::to_string(MMDNumbers) + "\\MMD" + std::to_string(MMDNumbers) + "_0.txt";
+
+				morphMan->GetMorph(mouseIndex)->SetWeight(1);
+
+				mmdModel->UpdateMorph();
+
+				Update();
+				Draw();
+				glfwSwapBuffers(m_window);	//buffer
+				glfwPollEvents(); //check events
+
+				screenShot(0, 0, w, h, picturePath);
+
+				SaveDataSet(0.0, 0.0, 1.0, 0.0, 0.0, 0.0, labelPath);
+
+				picturePath = imgBaseString + "\\" + std::to_string(MMDNumbers) + "\\MMD" + std::to_string(MMDNumbers) + "_1";
+				labelPath = labelBaseString + "\\" + std::to_string(MMDNumbers) + "\\MMD" + std::to_string(MMDNumbers) + "_1.txt";
+
+				morphMan->GetMorph(leftIndex)->SetWeight(1);
+				morphMan->GetMorph(rightIndex)->SetWeight(1);
+				morphMan->GetMorph(mouseIndex)->SetWeight(0);
+
+				mmdModel->UpdateMorph();
+
+				Update();
+				Draw();
+				glfwSwapBuffers(m_window);	//buffer
+				glfwPollEvents(); //check events
+
+				screenShot(0, 0, w, h, picturePath);
+
+				SaveDataSet(1.0, 1.0, 0.0, 0.0, 0.0, 0.0, labelPath);
+
+				for (int i = 2; i < 72; i++) {
 
 					LoadVPDFile("D:\\mypaper\\dataSet\\vpd\\0_0_0.vpd");
 					
-					morphMan->GetMorph(leftIndex)->SetWeight(lefteye[i - 1]);
-					morphMan->GetMorph(rightIndex)->SetWeight(righteye[i - 1]);
-					morphMan->GetMorph(mouseIndex)->SetWeight(mouse[i - 1]);
+					morphMan->GetMorph(leftIndex)->SetWeight(lefteye[i - 2]);
+					morphMan->GetMorph(rightIndex)->SetWeight(righteye[i - 2]);
+					morphMan->GetMorph(mouseIndex)->SetWeight(mouse[i - 2]);
 
 					mmdModel->UpdateMorph();
 
@@ -3498,13 +3422,13 @@ namespace saba
 					picturePath = imgBaseString + "\\" + std::to_string(MMDNumbers) + "\\MMD" + std::to_string(MMDNumbers) + "_" + std::to_string(i);
 					screenShot(0, 0, w, h, picturePath);
 					labelPath = labelBaseString + "\\" + std::to_string(MMDNumbers) + "\\MMD" + std::to_string(MMDNumbers) + "_" + std::to_string(i) + ".txt";
-					SaveDataSet(lefteye[i - 1], righteye[i - 1], mouse[i - 1], 0, 0, 0, labelPath);
+					SaveDataSet(lefteye[i - 2], righteye[i - 2], mouse[i - 2], 0, 0, 0, labelPath);
 
-					LoadVPDFile("D:\\mypaper\\dataSet\\vpd\\" + std::to_string(int(x[i - 1])) + "_" + std::to_string(int(y[i - 1])) + "_" + std::to_string(int(z[i - 1])) + ".vpd");
+					LoadVPDFile("D:\\mypaper\\dataSet\\vpd\\" + std::to_string(int(x[i - 2])) + "_" + std::to_string(int(y[i - 2])) + "_" + std::to_string(int(z[i - 2])) + ".vpd");
 
-					morphMan->GetMorph(leftIndex)->SetWeight(lefteye[i - 1]);
-					morphMan->GetMorph(rightIndex)->SetWeight(righteye[i - 1]);
-					morphMan->GetMorph(mouseIndex)->SetWeight(mouse[i - 1]);
+					morphMan->GetMorph(leftIndex)->SetWeight(lefteye[i - 2]);
+					morphMan->GetMorph(rightIndex)->SetWeight(righteye[i - 2]);
+					morphMan->GetMorph(mouseIndex)->SetWeight(mouse[i - 2]);
 
 					Update();
 					Draw();
@@ -3515,7 +3439,7 @@ namespace saba
 					picturePath = imgBaseString + "\\" + std::to_string(MMDNumbers) + "\\MMD" + std::to_string(MMDNumbers) + "_" + std::to_string(70 + i);
 					screenShot(0, 0, w, h, picturePath);
 					labelPath = labelBaseString + "\\" + std::to_string(MMDNumbers) + "\\MMD" + std::to_string(MMDNumbers) + "_" + std::to_string(70 + i) + ".txt";
-					SaveDataSet(lefteye[i - 1], righteye[i - 1], mouse[i - 1], int(x[i - 1]), int(y[i - 1]), int(z[i - 1]), labelPath);
+					SaveDataSet(lefteye[i - 2], righteye[i - 2], mouse[i - 2], int(x[i - 2]), int(y[i - 2]), int(z[i - 2]), labelPath);
 				}
 				lefteye.clear();
 				righteye.clear();
