@@ -11,7 +11,7 @@ Download FreeImage 3.18.0 不要載 Download FreeImage 3.18.0 [WIN32/WIN64]
 			FreeImaged.lib丟到C:\Program Files (x86)\Microsoft Visual Studio\2019\Community\VC\Tools\MSVC\14.29.30037\lib\x64
 			FreeImaged.dll丟到saba/build的資料夾
 
-4.#include <FreeImage.h>要加
+4.#include <FreeImage.h>要加      (這一步因為程式裡就有所以可以不用做)
 
 #ifdef _DEBUG
  
